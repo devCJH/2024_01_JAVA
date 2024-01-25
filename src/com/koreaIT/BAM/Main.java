@@ -4,17 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.util.Util;
 import com.koreaIT.BAM.vo.Article;
 
 class Main {
+	
+	static int lastArticleId;
+	static List<Article> articles;
+	
+	static {
+		articles = new ArrayList<>();
+		lastArticleId = 0;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("== 프로그램 시작 ==");
 		
+		makeTestData();
+		
 		Scanner sc = new Scanner(System.in);
-		
-		int lastArticleId = 0;
-		
-		List<Article> articles = new ArrayList<>();
 		
 		while (true) {
 			System.out.printf("명령어) ");
@@ -56,7 +64,7 @@ class Main {
 					break;
 				}
 				
-				Article article = new Article(lastArticleId, title, body);
+				Article article = new Article(lastArticleId, Util.getDateStr(), Util.getDateStr(), title, body);
 				
 				articles.add(article);
 				
@@ -69,11 +77,11 @@ class Main {
 					continue;
 				}
 				
-				System.out.println("번호	|	제목");
+				System.out.println("번호	|	제목	|		작성일	");
 				
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i);
-					System.out.printf("%d	|	%s\n", article.id, article.title);
+					System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate);
 				}
 				
 			} else if (cmd.startsWith("article detail ")) {
@@ -96,6 +104,8 @@ class Main {
 				}
 				
 				System.out.printf("번호 : %d\n", foundArticle.id);
+				System.out.printf("작성일 : %s\n", foundArticle.regDate);
+				System.out.printf("수정일 : %s\n", foundArticle.updateDate);
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
 				
@@ -125,6 +135,7 @@ class Main {
 				
 				foundArticle.title = title;
 				foundArticle.body = body;
+				foundArticle.updateDate = Util.getDateStr();
 				
 				System.out.printf("%d번 게시물을 수정했습니다\n", id);
 				
@@ -160,4 +171,18 @@ class Main {
 		
 		System.out.println("== 프로그램 종료 ==");
 	}
+
+	private static void makeTestData() {
+		articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "테스트1", "테스트1"));
+		articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "테스트2", "테스트2"));
+		articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "테스트3", "테스트3"));
+	}
 }
+
+
+
+
+
+
+
+
